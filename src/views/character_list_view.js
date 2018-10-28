@@ -6,14 +6,18 @@ const CharacterListView = function(container) {
 }
 
 CharacterListView.prototype.bindEvents = function () {
-  PubSub.subscribe("Character:characters-ready", (event) => {;
+  PubSub.subscribe("Character:characters-ready", (event) => {
     this.characters = event.detail;
-    console.log(this.characters);
+    this.render();
+  })
+  PubSub.subscribe("Character:selected-characters-ready", (event) => {
+    this.characters = event.detail;
     this.render();
   });
 };
 
 CharacterListView.prototype.render = function() {
+  this.container.textContent = ""
   this.characters.forEach((character) => {
     const characterView = new CharacterView(this.container, character);
     characterView.render();

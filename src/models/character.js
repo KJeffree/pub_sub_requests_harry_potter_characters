@@ -11,11 +11,37 @@ Character.prototype.getData = function () {
   requestHelper.get()
     .then((data) => {
       this.handleDataReady(data);
-      console.log(this.data);
       PubSub.publish("Character:characters-ready", this.data);
     }).catch((error) => {
       PubSub.publish("Characters:error", error);
     });
+};
+
+Character.prototype.bindEvents = function () {
+  PubSub.subscribe('SelectCharacterView:change', (event) => {
+    const selectedCategory = event.detail;
+    console.log(selectedCategory);
+    this.publishCharacterInfo(selectedCategory);
+  })
+};
+
+Character.prototype.publishCharacterInfo = function(selectedCategory) {
+  const selectedCharacters = this.findCharacters(selectedCategory)
+  PubSub.publish('Character:selected-characters-ready', selectedCharacters)
+}
+
+Character.prototype.findCharacters = function (selectedCategory) {
+  category = selectedCategory
+  if (category === "Neither") {
+    characters = this.data.filter((character) => {
+      return character.filters.staff === false && character.filters.student === false;
+    })
+  } else {
+    characters = this.data.filter((character) => {
+      return character.filters[category] == true;
+    })
+  }
+  return characters
 };
 
 Character.prototype.handleDataReady = function (characters) {

@@ -8,7 +8,6 @@ SelectCharacterView.prototype.bindEvents = function () {
   PubSub.subscribe('Character:characters-ready', (event) => {
     const allCharacters = event.detail;
     this.populate(allCharacters)
-    console.log(allCharacters);
   })
 
   this.element.addEventListener('change', (event) => {
