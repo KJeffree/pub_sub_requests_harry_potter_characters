@@ -5,9 +5,9 @@ const SelectCharacterSpeciesView = function(element) {
 }
 
 SelectCharacterSpeciesView.prototype.bindEvents = function () {
-  PubSub.subscribe('Character:characters-ready', (event) -> {
-    const allCharacters = event.detail;
-    this.populate(allCharacters)
+  PubSub.subscribe('Character:characters-species-ready', (event) => {
+    const allSpecies = event.detail;
+    this.populate(allSpecies)
   })
 
   this.element.addEventListener('change', (event) => {
@@ -16,11 +16,19 @@ SelectCharacterSpeciesView.prototype.bindEvents = function () {
   })
 };
 
-SelectCharacterSpeciesView.prototype.populate = function (characterData) {
+SelectCharacterSpeciesView.prototype.populate = function (speciesData) {
   const optionAll = document.createElement('option');
   optionAll.textContent = "All"
   optionAll.value = "All"
   this.element.appendChild(optionAll);
 
-  
+  speciesData.forEach((species) => {
+    const option = document.createElement('option');
+    option.textContent = species;
+    option.value = species;
+    this.element.appendChild(option)
+  })
+
 };
+
+module.exports = SelectCharacterSpeciesView;

@@ -3,6 +3,7 @@ const PubSub = require('../helpers/pub_sub.js')
 
 const Character = function() {
   this.data = {};
+  this.speciesData = {};
 };
 
 Character.prototype.getData = function () {
@@ -12,7 +13,8 @@ Character.prototype.getData = function () {
     .then((data) => {
       this.handleDataReady(data);
       PubSub.publish("Character:characters-ready", this.data);
-      this.handleDataReadySpecies(data);
+      this.speciesData = this.handleDataReadySpecies(data);
+      PubSub.publish("Character:characters-species-ready", this.speciesData)
     }).catch((error) => {
       PubSub.publish("Characters:error", error);
     });
@@ -23,12 +25,35 @@ Character.prototype.bindEvents = function () {
     const selectedCategory = event.detail;
     this.publishCharacterInfo(selectedCategory);
   })
+  PubSub.subscribe('SelectCharacterSpeciesView:change', (event) => {
+    const selectedSpecies = event.detail;
+    this.publishSpeciesInfo(selectedSpecies);
+  })
 };
 
 Character.prototype.publishCharacterInfo = function(selectedCategory) {
   const selectedCharacters = this.findCharacters(selectedCategory)
   PubSub.publish('Character:selected-characters-ready', selectedCharacters)
 }
+
+Character.prototype.publishSpeciesInfo = function (selectedSpecies) {
+  const characters = this.findSpecies(selectedSpecies);
+  console.log(characters);
+  PubSub.publish('Character:selected-species-characters-ready', characters)
+};
+
+Character.prototype.findSpecies = function (selectedSpecies) {
+  speciesChosen = selectedSpecies
+  if (speciesChosen === "All") {
+    characters = this.data
+  } else {
+    characters = this.data.filter((character) => {
+      return character.details.species === speciesChosen
+    })
+  }
+  console.log(characters);
+  return characters
+};
 
 Character.prototype.findCharacters = function (selectedCategory) {
   category = selectedCategory
@@ -44,6 +69,11 @@ Character.prototype.findCharacters = function (selectedCategory) {
     })
   }
   return characters
+};
+
+Character.prototype.handleDataReadySpecies = function (characters) {
+  return characters.map(character => character.species)
+  .filter((species, index, speciesArray) => speciesArray.indexOf(species) === index);
 };
 
 Character.prototype.handleDataReady = function (characters) {
