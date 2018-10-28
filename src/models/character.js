@@ -20,7 +20,6 @@ Character.prototype.getData = function () {
 Character.prototype.bindEvents = function () {
   PubSub.subscribe('SelectCharacterView:change', (event) => {
     const selectedCategory = event.detail;
-    console.log(selectedCategory);
     this.publishCharacterInfo(selectedCategory);
   })
 };
