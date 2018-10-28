@@ -1,0 +1,81 @@
+* {
+  margin: 0px;
+}
+
+body {
+  background-image: url(ties.jpg);
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+img {
+  height: 200px;
+  width: 150px;
+  object-fit: cover;
+  float: left;
+  margin: 0 auto;
+}
+
+h2 {
+  font-size: 30px;
+  text-align: center;
+  margin: 10px 0px;
+}
+
+
+h1 {
+  text-align: center;
+  font-size: 60px;
+  padding: 10px 16px;
+  width: 100%;
+  background-color: #1A237E ;
+  font-family: Rosario;
+  color: #F0F4C3;
+}
+
+.detailsItem {
+  text-transform: capitalize;
+  list-style: none;
+  font-size: 20px;
+}
+
+.character {
+  background-color: ;
+  padding: 20px;
+  background-color: hsla(257, 100%, 35%, 0.4);
+  color: #F0F4C3;
+  border-radius: 20px;
+  font-family: Rosario;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  padding: 40px 30px;
+}
+
+.filter {
+  padding-top: 102px;
+  font-size: 20px;
+  margin: 0 auto;
+  width: 70%;
+}
+
+select {
+  text-transform: capitalize;
+}
+
+#characters-section {
+  display: grid;
+  grid-gap: 30px;
+  grid-template-columns: repeat(2, 500px);
+  justify-content: space-around;
+  grid-auto-rows: minmax(100px, auto);
+  margin: 10px;
+}
