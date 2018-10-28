@@ -12,6 +12,7 @@ Character.prototype.getData = function () {
     .then((data) => {
       this.handleDataReady(data);
       PubSub.publish("Character:characters-ready", this.data);
+      this.handleDataReadySpecies(data);
     }).catch((error) => {
       PubSub.publish("Characters:error", error);
     });
@@ -20,7 +21,6 @@ Character.prototype.getData = function () {
 Character.prototype.bindEvents = function () {
   PubSub.subscribe('SelectCharacterView:change', (event) => {
     const selectedCategory = event.detail;
-    console.log(selectedCategory);
     this.publishCharacterInfo(selectedCategory);
   })
 };
@@ -36,6 +36,8 @@ Character.prototype.findCharacters = function (selectedCategory) {
     characters = this.data.filter((character) => {
       return character.filters.staff === false && character.filters.student === false;
     })
+  } else if (category === "All") {
+    characters = this.data
   } else {
     characters = this.data.filter((character) => {
       return character.filters[category] == true;

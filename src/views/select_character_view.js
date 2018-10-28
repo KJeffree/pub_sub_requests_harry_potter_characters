@@ -17,6 +17,11 @@ SelectCharacterView.prototype.bindEvents = function () {
 };
 
 SelectCharacterView.prototype.populate = function (characterData) {
+  const optionAll = document.createElement('option');
+  optionAll.textContent = "All"
+  optionAll.value = "All"
+  this.element.appendChild(optionAll);
+
   Object.entries(characterData[0].filters).forEach(
     ([key, value]) => {
       const option = document.createElement('option');

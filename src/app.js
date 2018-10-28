@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const elementInfo = new SelectCharacterView(selectElement);
   elementInfo.bindEvents();
 
+  const selectElement = document.querySelector('#filter-species');
+  const elementInfo = new SelectCharacterSpeciesView(selectElement);
+  elementInfo.bindEvents();
+
   const characters = new Character();
   characters.getData();
   characters.bindEvents();
