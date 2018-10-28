@@ -14,6 +14,10 @@ CharacterListView.prototype.bindEvents = function () {
     this.characters = event.detail;
     this.render();
   });
+  PubSub.subscribe("Character:selected-species-characters-ready", (event) => {
+    this.characters = event.detail;
+    this.render()
+  })
 };
 
 CharacterListView.prototype.render = function() {
