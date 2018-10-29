@@ -35,6 +35,9 @@ CharacterView.prototype.createDetailslist = function () {
 CharacterView.prototype.populateList = function (list) {
   Object.entries(this.character.details).forEach(
     ([key, value]) => {
+      if (value === "") {
+        value = "Unknown"
+      }
       const detailsItem = document.createElement('li');
       detailsItem.classList.add('detailsItem');
       detailsItem.textContent = `${ key }: ${ value } `

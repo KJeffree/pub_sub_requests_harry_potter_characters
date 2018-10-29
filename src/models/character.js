@@ -87,7 +87,8 @@ Character.prototype.modelDetails = function (characters) {
       details: {
         species: character.species,
         ancestry: character.ancestry,
-        house: character.house
+        house: character.house,
+        patronus: character.patronus
       },
       image: character.image,
       filters: {
