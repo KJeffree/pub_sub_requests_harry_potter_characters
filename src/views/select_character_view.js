@@ -20,6 +20,7 @@ SelectCharacterView.prototype.populate = function (characterData) {
   const optionAll = document.createElement('option');
   optionAll.textContent = "All"
   optionAll.value = "All"
+  optionAll.selected = "selected"
   this.element.appendChild(optionAll);
 
   Object.entries(characterData[0].filters).forEach(

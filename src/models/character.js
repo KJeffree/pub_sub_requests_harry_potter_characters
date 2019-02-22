@@ -4,6 +4,8 @@ const PubSub = require('../helpers/pub_sub.js')
 const Character = function() {
   this.data = {};
   this.speciesData = {};
+  this.currentSpecies = "All";
+  this.currentCharacterDetail = "All";
 };
 
 Character.prototype.getData = function () {
@@ -23,10 +25,12 @@ Character.prototype.getData = function () {
 Character.prototype.bindEvents = function () {
   PubSub.subscribe('SelectCharacterView:change', (event) => {
     const selectedCategory = event.detail;
+    this.currentCharacterDetail = selectedCategory;
     this.publishCharacterInfo(selectedCategory);
   })
   PubSub.subscribe('SelectCharacterSpeciesView:change', (event) => {
     const selectedSpecies = event.detail;
+    this.currentSpecies = selectedSpecies;
     this.publishSpeciesInfo(selectedSpecies);
   })
 };
@@ -43,30 +47,71 @@ Character.prototype.publishSpeciesInfo = function (selectedSpecies) {
 };
 
 Character.prototype.findSpecies = function (selectedSpecies) {
+  console.log("CharacterDetails", this.currentCharacterDetail);
   speciesChosen = selectedSpecies
-  if (speciesChosen === "All") {
-    characters = this.data
+  if (this.currentCharacterDetail == "All") {
+    if (speciesChosen === "All") {
+      characters = this.data
+    } else {
+      characters = this.data.filter((character) => {
+        return character.details.species === speciesChosen
+      })
+    }
+  } else if (this.currentCharacterDetail == "Neither") {
+    if (speciesChosen === "All") {
+      characters = this.data.filter((character) => {
+        return character.filters.staff === false && character.filters.student === false;
+      })
+    } else {
+      characters = this.data.filter((character) => {
+        return character.details.species === speciesChosen && character.filters.staff === false && character.filters.student === false;
+      })
+    }
   } else {
-    characters = this.data.filter((character) => {
-      return character.details.species === speciesChosen
-    })
+    if (speciesChosen === "All") {
+      characters = this.data.filter((character) => {
+        return character.filters[this.currentCharacterDetail] == true;
+      })
+    } else {
+      characters = this.data.filter((character) => {
+        return character.details.species === speciesChosen && character.filters[this.currentCharacterDetail] == true;
+      })
+    }
   }
-  console.log(characters);
+  console.log("speciesChosen", speciesChosen)
+  console.log("characters", characters)
   return characters
 };
 
 Character.prototype.findCharacters = function (selectedCategory) {
   category = selectedCategory
-  if (category === "Neither") {
-    characters = this.data.filter((character) => {
-      return character.filters.staff === false && character.filters.student === false;
-    })
-  } else if (category === "All") {
-    characters = this.data
+  if (this.currentSpecies == "All") {
+    if (category === "Neither") {
+      console.log("Working");
+      characters = this.data.filter((character) => {
+        return character.filters.staff === false && character.filters.student === false;
+      })
+    } else if (category === "All") {
+      characters = this.data
+    } else {
+      characters = this.data.filter((character) => {
+        return character.filters[category] == true;
+      })
+    }
   } else {
-    characters = this.data.filter((character) => {
-      return character.filters[category] == true;
-    })
+    if (category === "Neither") {
+      characters = this.data.filter((character) => {
+        return character.filters.staff === false && character.filters.student === false && character.details.species === this.currentSpecies;
+      })
+    } else if (category === "All") {
+      characters = this.data.filter((character) => {
+        return character.details.species === this.currentSpecies
+      })
+    } else {
+      characters = this.data.filter((character) => {
+        return character.filters[category] == true && character.details.species === this.currentSpecies;
+      })
+    }
   }
   return characters
 };

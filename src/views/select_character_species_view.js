@@ -20,6 +20,7 @@ SelectCharacterSpeciesView.prototype.populate = function (speciesData) {
   const optionAll = document.createElement('option');
   optionAll.textContent = "All"
   optionAll.value = "All"
+  optionAll.selected = "selected"
   this.element.appendChild(optionAll);
 
   speciesData.forEach((species) => {
